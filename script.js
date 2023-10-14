@@ -3,15 +3,15 @@ const display = document.querySelector('.input');
 const arithmeticOperatorBtns = document.querySelectorAll('.arithmeticOperator');
 const equalSign = document.querySelector('.equal');
 
-let firstNumber = 0;
-let secondNumber = 0;
+let firstNumber = null;
+let secondNumber = null;
 let operator; 
 let displayValue = 0;
 let resultValue = 0;
 
 numbersButtons.forEach(btn => btn.addEventListener('click', displayNumber))
 arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
-    if (secondNumber === 0) {
+    if (secondNumber === null) {
         operator = e.target.textContent;
         return;
     }
@@ -24,7 +24,7 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             }
             display.textContent = resultValue;
             firstNumber = resultValue;
-            secondNumber = 0;
+            secondNumber = null;
             operator = operator = e.target.textContent;
             break;
         case '-': 
@@ -34,7 +34,7 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             }
             display.textContent = resultValue;
             firstNumber = resultValue;
-            secondNumber = 0;
+            secondNumber = null;
             operator = operator = e.target.textContent;
             break;
         case '*': 
@@ -44,7 +44,7 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             }
             display.textContent = resultValue;
             firstNumber = resultValue;
-            secondNumber = 0;
+            secondNumber = null;
             operator = operator = e.target.textContent;
             break;
         case '/': 
@@ -54,7 +54,7 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             }
             display.textContent = resultValue;
             firstNumber = resultValue;
-            secondNumber = 0;
+            secondNumber = null;
             operator = operator = e.target.textContent;
             break;
         case '%': 
@@ -64,7 +64,7 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             }
             display.textContent = resultValue;
             firstNumber = resultValue;
-            secondNumber = 0;
+            secondNumber = null;
             operator = operator = e.target.textContent;
             break;
     }
@@ -95,7 +95,7 @@ function divideWithRemainder(a, b) {
 function operate(firstNumber, secondNumber, operator) {
     switch (operator) {
         case '+':
-            if (secondNumber === 0) return;
+            if (secondNumber === null) return;
            
             resultValue = add(firstNumber, secondNumber);
             if (resultValue.toString().length > 9) {
@@ -104,7 +104,7 @@ function operate(firstNumber, secondNumber, operator) {
             display.textContent = resultValue;
             break;
         case '-':
-            if (secondNumber === 0) return;
+            if (secondNumber === null) return;
 
             resultValue = subtract(firstNumber, secondNumber);
             if (resultValue.toString().length > 9) {
@@ -113,7 +113,7 @@ function operate(firstNumber, secondNumber, operator) {
             display.textContent = resultValue;
             break;
         case '*': 
-            if (secondNumber === 0) return;
+            if (secondNumber === null) return;
 
             resultValue = multiply(firstNumber, secondNumber);
             if (resultValue.toString().length > 9) {
@@ -122,18 +122,18 @@ function operate(firstNumber, secondNumber, operator) {
             display.textContent = resultValue;
             break;
         case '/':
-            if (secondNumber === 0) return;
+            if (secondNumber === null) return;
 
             resultValue = divide(firstNumber, secondNumber);
 
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 10)
             }
-
+            
             display.textContent = resultValue;
             break;
         case '%':
-            if (secondNumber === 0) return;
+            if (secondNumber === null) return;
 
             resultValue = divideWithRemainder(firstNumber, secondNumber);
             if (resultValue.toString().length > 9) {
@@ -147,11 +147,13 @@ function operate(firstNumber, secondNumber, operator) {
 function displayNumber(e) {
     if (operator === undefined) {
 
-        if (firstNumber === 0) {
+        if (firstNumber === null) {
             displayValue = e.target.textContent;
 
             firstNumber = +displayValue;
         } else {
+            if (firstNumber.toString().length > 8) return;
+           
             displayValue += e.target.textContent;
 
             firstNumber = +displayValue;
@@ -160,11 +162,12 @@ function displayNumber(e) {
         display.textContent = displayValue;
     } else {
         
-        if (secondNumber === 0) {
+        if (secondNumber === null) {
             displayValue = e.target.textContent;
 
             secondNumber = +displayValue;
         } else {
+            if (secondNumber.toString().length > 8) return;
             displayValue += e.target.textContent;
 
             secondNumber = +displayValue;
@@ -173,4 +176,3 @@ function displayNumber(e) {
         display.textContent = displayValue;
     }
 }
-
