@@ -19,6 +19,9 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
     switch (operator) {
         case '+': 
             resultValue = add(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
             display.textContent = resultValue;
             firstNumber = resultValue;
             secondNumber = 0;
@@ -26,6 +29,9 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             break;
         case '-': 
             resultValue = subtract(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
             display.textContent = resultValue;
             firstNumber = resultValue;
             secondNumber = 0;
@@ -33,6 +39,9 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             break;
         case '*': 
             resultValue = multiply(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
             display.textContent = resultValue;
             firstNumber = resultValue;
             secondNumber = 0;
@@ -40,6 +49,9 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             break;
         case '/': 
             resultValue = divide(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 10)
+            }
             display.textContent = resultValue;
             firstNumber = resultValue;
             secondNumber = 0;
@@ -47,6 +59,9 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
             break;
         case '%': 
             resultValue = divideWithRemainder(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
             display.textContent = resultValue;
             firstNumber = resultValue;
             secondNumber = 0;
@@ -82,32 +97,49 @@ function operate(firstNumber, secondNumber, operator) {
         case '+':
             if (secondNumber === 0) return;
            
-            display.textContent = add(firstNumber, secondNumber);
-            
+            resultValue = add(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
             break;
         case '-':
             if (secondNumber === 0) return;
 
-            display.textContent = subtract(firstNumber, secondNumber);
-            
+            resultValue = subtract(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
             break;
         case '*': 
             if (secondNumber === 0) return;
 
-            display.textContent = multiply(firstNumber, secondNumber);
-            
+            resultValue = multiply(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
             break;
         case '/':
             if (secondNumber === 0) return;
 
-            display.textContent = divide(firstNumber, secondNumber);
-            
+            resultValue = divide(firstNumber, secondNumber);
+
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 10)
+            }
+
+            display.textContent = resultValue;
             break;
         case '%':
             if (secondNumber === 0) return;
 
-            display.textContent = divideWithRemainder(firstNumber, secondNumber);
-            
+            resultValue = divideWithRemainder(firstNumber, secondNumber);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
             break;
     }
 }
