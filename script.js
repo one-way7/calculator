@@ -7,6 +7,7 @@ const clearBtn = document.querySelector('.clear');
 
 let firstNumber = null;
 let secondNumber = null;
+let resultValue = false;
 let operator = null; 
 let displayValue;
 
@@ -37,18 +38,22 @@ function divideWithRemainder(a, b) {
 }
 
 function showNumberOnDisplay(e, firstOperand, secondOperand, mathOperator) {
-    if (mathOperator === null) {
-        
-        if (firstOperand === null) { 
+    if (!mathOperator && resultValue) {
+        mathOperator = null;
+        firstOperand = null;
+        resultValue = false;
+    };
+    
+    if (mathOperator === null || firstOperand === 0) {
+        if (firstOperand === null || firstOperand === 0 ) { 
+            
             displayValue = e.target.textContent;
-
             firstNumber = +displayValue;
         } else { 
             
             if (displayValue.length > 8) return;
            
             displayValue += e.target.textContent;
-
             firstNumber = +displayValue;
         }
         
@@ -85,7 +90,7 @@ function calculate(e, firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
             secondNumber = null;
             operator = e.target.textContent;
             break;
@@ -95,7 +100,7 @@ function calculate(e, firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
             secondNumber = null;
             operator = operator = e.target.textContent;
             break;
@@ -105,7 +110,7 @@ function calculate(e, firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
             secondNumber = null;
             operator = operator = e.target.textContent;
             break;
@@ -115,7 +120,7 @@ function calculate(e, firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 10)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
             secondNumber = null;
             operator = operator = e.target.textContent;
             break;
@@ -125,7 +130,7 @@ function calculate(e, firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
             secondNumber = null;
             operator = operator = e.target.textContent;
             break;
@@ -142,8 +147,10 @@ function operate(firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9);
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
+            resultValue = true;
             secondNumber = null;
+            operator = null;
             break;
         case '-':
             if (secondOperand === null) return;
@@ -153,7 +160,9 @@ function operate(firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9);
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
+            resultValue = true;
+            operator = null;
             secondNumber = null;
             break;
         case '*': 
@@ -164,7 +173,9 @@ function operate(firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9);
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
+            resultValue = true;
+            operator = null;
             secondNumber = null;
             break;
         case '/':
@@ -182,7 +193,9 @@ function operate(firstOperand, secondOperand, mathOperator) {
             }
             
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
+            resultValue = true;
+            operator = null;
             secondNumber = null;
             break;
         case '%':
@@ -193,7 +206,9 @@ function operate(firstOperand, secondOperand, mathOperator) {
                 displayValue = displayValue.toString().slice(0, 9)
             }
             display.textContent = displayValue;
-            firstNumber = displayValue;
+            firstNumber = +displayValue;
+            resultValue = true;
+            operator = null;
             secondNumber = null;
             break;
     }
@@ -203,8 +218,30 @@ function allClear() {
     firstNumber = null;
     secondNumber = null;
     operator = null; 
-    displayValue;
+    resultValue = false;
     displayValue;
     display.textContent = '';
 }
 
+function clear() {
+    if (resultValue) return;
+    if (displayValue === undefined) return;
+
+    let res = displayValue.toString().slice(0, -1);
+    if (res.length === 0) {
+        displayValue = '';
+        display.textContent = '';
+        return;
+    };
+    
+    if (!operator && !secondNumber) {
+        displayValue = res;
+        display.textContent = displayValue;
+        firstNumber = +displayValue;
+    } else if (operator && !resultValue) {
+        console.log(123);
+        displayValue = res;
+        display.textContent = displayValue;
+        secondNumber = +displayValue;
+    }
+}
