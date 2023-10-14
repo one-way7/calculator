@@ -5,71 +5,12 @@ const equalSign = document.querySelector('.equal');
 
 let firstNumber = null;
 let secondNumber = null;
-let operator; 
-let displayValue = 0;
-let resultValue = 0;
+let operator = null; 
+let displayValue;
+let resultValue;
 
-numbersButtons.forEach(btn => btn.addEventListener('click', displayNumber))
-arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => {
-    if (secondNumber === null) {
-        operator = e.target.textContent;
-        return;
-    }
-
-    switch (operator) {
-        case '+': 
-            resultValue = add(firstNumber, secondNumber);
-            if (resultValue.toString().length > 9) {
-                resultValue = resultValue.toString().slice(0, 9)
-            }
-            display.textContent = resultValue;
-            firstNumber = resultValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '-': 
-            resultValue = subtract(firstNumber, secondNumber);
-            if (resultValue.toString().length > 9) {
-                resultValue = resultValue.toString().slice(0, 9)
-            }
-            display.textContent = resultValue;
-            firstNumber = resultValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '*': 
-            resultValue = multiply(firstNumber, secondNumber);
-            if (resultValue.toString().length > 9) {
-                resultValue = resultValue.toString().slice(0, 9)
-            }
-            display.textContent = resultValue;
-            firstNumber = resultValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '/': 
-            resultValue = divide(firstNumber, secondNumber);
-            if (resultValue.toString().length > 9) {
-                resultValue = resultValue.toString().slice(0, 10)
-            }
-            display.textContent = resultValue;
-            firstNumber = resultValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '%': 
-            resultValue = divideWithRemainder(firstNumber, secondNumber);
-            if (resultValue.toString().length > 9) {
-                resultValue = resultValue.toString().slice(0, 9)
-            }
-            display.textContent = resultValue;
-            firstNumber = resultValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-    }
-    
-}));
+numbersButtons.forEach(btn => btn.addEventListener('click', e => showNumberOnDisplay(e, firstNumber, secondNumber, operator)))
+arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => calculate(e, firstNumber, secondNumber, operator)));
 equalSign.addEventListener('click', () => operate(firstNumber, secondNumber, operator))
 
 function add(a, b) {
@@ -92,39 +33,43 @@ function divideWithRemainder(a, b) {
     return a % b;
 }
 
-function operate(firstNumber, secondNumber, operator) {
-    switch (operator) {
+function operate(firstOperand, secondOperand, mathOperator) {
+    switch (mathOperator) {
         case '+':
-            if (secondNumber === null) return;
+            if (secondOperand === null) return;
            
-            resultValue = add(firstNumber, secondNumber);
+            resultValue = add(firstOperand, secondOperand);
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 9)
             }
             display.textContent = resultValue;
             break;
         case '-':
-            if (secondNumber === null) return;
+            if (secondOperand === null) return;
 
-            resultValue = subtract(firstNumber, secondNumber);
+            resultValue = subtract(firstOperand, secondOperand);
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 9)
             }
             display.textContent = resultValue;
             break;
         case '*': 
-            if (secondNumber === null) return;
+            if (secondOperand === null) return;
 
-            resultValue = multiply(firstNumber, secondNumber);
+            resultValue = multiply(firstOperand, secondOperand);
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 9)
             }
             display.textContent = resultValue;
             break;
         case '/':
-            if (secondNumber === null) return;
-
-            resultValue = divide(firstNumber, secondNumber);
+            if (secondOperand === null) return;
+            if (secondOperand === 0) {
+                display.textContent = 'Error';
+                return;
+            }
+            
+            resultValue = divide(firstOperand, secondOperand);
 
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 10)
@@ -133,9 +78,9 @@ function operate(firstNumber, secondNumber, operator) {
             display.textContent = resultValue;
             break;
         case '%':
-            if (secondNumber === null) return;
+            if (secondOperand === null) return;
 
-            resultValue = divideWithRemainder(firstNumber, secondNumber);
+            resultValue = divideWithRemainder(firstOperand, secondOperand);
             if (resultValue.toString().length > 9) {
                 resultValue = resultValue.toString().slice(0, 9)
             }
@@ -144,10 +89,10 @@ function operate(firstNumber, secondNumber, operator) {
     }
 }
 
-function displayNumber(e) {
-    if (operator === undefined) {
-
-        if (firstNumber === null) {
+function showNumberOnDisplay(e, firstOperand, secondOperand, mathOperator) {
+    if (mathOperator === null) {
+        
+        if (firstOperand === null) { 
             displayValue = e.target.textContent;
 
             firstNumber = +displayValue;
@@ -162,7 +107,8 @@ function displayNumber(e) {
         display.textContent = displayValue;
     } else {
         
-        if (secondNumber === null) {
+        if (secondOperand === null) {
+            
             displayValue = e.target.textContent;
 
             secondNumber = +displayValue;
@@ -176,3 +122,65 @@ function displayNumber(e) {
         display.textContent = displayValue;
     }
 }
+
+function calculate(e, firstOperand, secondOperand, mathOperator) {
+    if (secondOperand === null) {
+        operator = e.target.textContent;
+        return;
+    }
+
+    switch (mathOperator) {
+        case '+': 
+            resultValue = add(firstOperand, secondOperand);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
+            firstNumber = resultValue;
+            secondNumber = null;
+            operator = e.target.textContent;
+            break;
+        case '-': 
+            resultValue = subtract(firstOperand, secondOperand);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
+            firstNumber = resultValue;
+            secondNumber = null;
+            operator = operator = e.target.textContent;
+            break;
+        case '*': 
+            resultValue = multiply(firstOperand, secondOperand);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
+            firstNumber = resultValue;
+            secondNumber = null;
+            operator = operator = e.target.textContent;
+            break;
+        case '/':
+            console.log(123);
+            resultValue = divide(firstOperand, secondOperand);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 10)
+            }
+            display.textContent = resultValue;
+            firstNumber = resultValue;
+            secondNumber = null;
+            operator = operator = e.target.textContent;
+            break;
+        case '%': 
+            resultValue = divideWithRemainder(firstOperand, secondOperand);
+            if (resultValue.toString().length > 9) {
+                resultValue = resultValue.toString().slice(0, 9)
+            }
+            display.textContent = resultValue;
+            firstNumber = resultValue;
+            secondNumber = null;
+            operator = operator = e.target.textContent;
+            break;
+    }
+}
+
