@@ -16,6 +16,24 @@ arithmeticOperatorBtns.forEach(btn => btn.addEventListener('click', e => calcula
 equalSign.addEventListener('click', () => operate(firstNumber, secondNumber, operator));
 allClearBtn.addEventListener('click', allClear);
 clearBtn.addEventListener('click', clear);
+document.addEventListener('keydown', e => {
+    if (e.key === 'Backspace') clear();
+
+    if (e.key === 'Escape') allClear();
+})
+document.addEventListener('keypress', e => {
+    if (/[0-9.]/.test(e.key)) {
+        showNumberOnDisplay(e, firstNumber, secondNumber, operator)
+    }
+
+    if (e.key === '=' || e.key === 'Enter') {
+        operate(firstNumber, secondNumber, operator);
+        return;
+    }
+
+    if (e.key === '+' || e.key === '-' || e.key === '*' || e.key === '/' || e.key === '%') calculate(e, firstNumber, secondNumber, operator);
+
+})
 
 function add(a, b) {
     return a + b;
@@ -38,105 +56,209 @@ function divideWithRemainder(a, b) {
 }
 
 function showNumberOnDisplay(e, firstOperand, secondOperand, mathOperator) {
-    if (e.target.textContent === '.' && resultValue || e.target.textContent === '.' && firstOperand === null ) return;
-    if (displayValue?.toString().includes('.') && e.target.textContent === '.') return;
-   
-    if (!mathOperator && resultValue) {
-        mathOperator = null;
-        firstOperand = null;
-        resultValue = false;
-    };
+    if (e.key === undefined) {
+        if (e.target.textContent === '.' && resultValue || e.target.textContent === '.' && firstOperand === null ) return;
+        if (displayValue?.toString().includes('.') && e.target.textContent === '.') return;
     
-    if (mathOperator === null || firstOperand === 0) {
-        if (firstOperand === null || (displayValue === '0' && e.target.textContent !== '.') ) { 
-            
-            displayValue = e.target.textContent;
-            firstNumber = +displayValue;
-        } else { 
-            
-            if (displayValue.length > 8) return;
-           
-            displayValue += e.target.textContent;
-            firstNumber = +displayValue;
-        }
+        if (!mathOperator && resultValue) {
+            mathOperator = null;
+            firstOperand = null;
+            resultValue = false;
+        };
         
-        display.textContent = displayValue;
-    } else {
-        
-        if (secondOperand === null) {
+        if (mathOperator === null || firstOperand === 0) {
+            if (firstOperand === null || (displayValue === '0' && e.target.textContent !== '.') ) { 
+                
+                displayValue = e.target.textContent;
+                firstNumber = +displayValue;
+            } else { 
+                
+                if (displayValue.length > 8) return;
             
-            displayValue = e.target.textContent;
-
-            secondNumber = +displayValue;
+                displayValue += e.target.textContent;
+                firstNumber = +displayValue;
+            }
+            
+            display.textContent = displayValue;
         } else {
+            
+            if (secondOperand === null) {
+                
+                displayValue = e.target.textContent;
 
-            if (displayValue.length > 8) return;
-            displayValue += e.target.textContent;
+                secondNumber = +displayValue;
+            } else {
 
-            secondNumber = +displayValue;
+                if (displayValue.length > 8) return;
+                displayValue += e.target.textContent;
+
+                secondNumber = +displayValue;
+            }
+        
+            display.textContent = displayValue;
         }
+    } else {
+        if (e.key === '.' && resultValue || e.key === '.' && firstOperand === null ) return;
+        if (displayValue?.toString().includes('.') && e.key === '.') return;
     
-        display.textContent = displayValue;
+        if (!mathOperator && resultValue) {
+            mathOperator = null;
+            firstOperand = null;
+            resultValue = false;
+        };
+        
+        if (mathOperator === null || firstOperand === 0) {
+            if (firstOperand === null || (displayValue === '0' && e.key !== '.') ) { 
+                
+                displayValue = e.key;
+                firstNumber = +displayValue;
+            } else { 
+                
+                if (displayValue.length > 8) return;
+            
+                displayValue += e.key;
+                firstNumber = +displayValue;
+            }
+            
+            display.textContent = displayValue;
+        } else {
+            
+            if (secondOperand === null) {
+                
+                displayValue = e.key;
+
+                secondNumber = +displayValue;
+            } else {
+
+                if (displayValue.length > 8) return;
+                displayValue += e.key;
+
+                secondNumber = +displayValue;
+            }
+        
+            display.textContent = displayValue;
+        }
     }
 }
 
 function calculate(e, firstOperand, secondOperand, mathOperator) {
-    if (secondOperand === null) {
-        operator = e.target.textContent;
-        return;
-    }
-    
-    switch (mathOperator) {
-        case '+': 
-            displayValue = add(firstOperand, secondOperand);
-            if (displayValue.toString().length > 9) {
-                displayValue = displayValue.toString().slice(0, 9)
-            }
-            display.textContent = displayValue;
-            firstNumber = +displayValue;
-            secondNumber = null;
+    if (firstOperand === null) return;
+    if (e.key === undefined) {
+        if (secondOperand === null) {
             operator = e.target.textContent;
-            break;
-        case '-': 
-            displayValue = subtract(firstOperand, secondOperand);
-            if (displayValue.toString().length > 9) {
-                displayValue = displayValue.toString().slice(0, 9)
-            }
-            display.textContent = displayValue;
-            firstNumber = +displayValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '*': 
-            displayValue = multiply(firstOperand, secondOperand);
-            if (displayValue.toString().length > 9) {
-                displayValue = displayValue.toString().slice(0, 9)
-            }
-            display.textContent = displayValue;
-            firstNumber = +displayValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '/':
-            displayValue = divide(firstOperand, secondOperand);
-            if (displayValue.toString().length > 9) {
-                displayValue = displayValue.toString().slice(0, 10)
-            }
-            display.textContent = displayValue;
-            firstNumber = +displayValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
-        case '%': 
-            displayValue = divideWithRemainder(firstOperand, secondOperand);
-            if (displayValue.toString().length > 9) {
-                displayValue = displayValue.toString().slice(0, 9)
-            }
-            display.textContent = displayValue;
-            firstNumber = +displayValue;
-            secondNumber = null;
-            operator = operator = e.target.textContent;
-            break;
+            return;
+        }
+        
+        switch (mathOperator) {
+            case '+': 
+                displayValue = add(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.target.textContent;
+                break;
+            case '-': 
+                displayValue = subtract(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = operator = e.target.textContent;
+                break;
+            case '*': 
+                displayValue = multiply(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = operator = e.target.textContent;
+                break;
+            case '/':
+                displayValue = divide(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 10)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = operator = e.target.textContent;
+                break;
+            case '%': 
+                displayValue = divideWithRemainder(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = operator = e.target.textContent;
+                break;
+        }
+    } else {
+        if (secondOperand === null) {
+            operator = e.key;
+            return;
+        }
+        
+        switch (mathOperator) {
+            case '+': 
+                displayValue = add(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.key;
+                break;
+            case '-': 
+                displayValue = subtract(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.key;
+                break;
+            case '*': 
+                displayValue = multiply(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.key;
+                break;
+            case '/':
+                displayValue = divide(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 10)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.key;
+                break;
+            case '%': 
+                displayValue = divideWithRemainder(firstOperand, secondOperand);
+                if (displayValue.toString().length > 9) {
+                    displayValue = displayValue.toString().slice(0, 9)
+                }
+                display.textContent = displayValue;
+                firstNumber = +displayValue;
+                secondNumber = null;
+                operator = e.key;
+                break;
+        }
     }
 }
 
@@ -242,7 +364,7 @@ function clear() {
         display.textContent = displayValue;
         firstNumber = +displayValue;
     } else if (operator && !resultValue) {
-        console.log(123);
+        
         displayValue = res;
         display.textContent = displayValue;
         secondNumber = +displayValue;
