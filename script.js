@@ -38,6 +38,9 @@ function divideWithRemainder(a, b) {
 }
 
 function showNumberOnDisplay(e, firstOperand, secondOperand, mathOperator) {
+    if (e.target.textContent === '.' && resultValue || e.target.textContent === '.' && firstOperand === null ) return;
+    if (displayValue?.toString().includes('.') && e.target.textContent === '.') return;
+   
     if (!mathOperator && resultValue) {
         mathOperator = null;
         firstOperand = null;
@@ -45,7 +48,7 @@ function showNumberOnDisplay(e, firstOperand, secondOperand, mathOperator) {
     };
     
     if (mathOperator === null || firstOperand === 0) {
-        if (firstOperand === null || firstOperand === 0 ) { 
+        if (firstOperand === null || (displayValue === '0' && e.target.textContent !== '.') ) { 
             
             displayValue = e.target.textContent;
             firstNumber = +displayValue;
